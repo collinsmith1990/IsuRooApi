@@ -12,6 +12,9 @@ class CandidateMatch < ActiveRecord::Base
    validate :match_isnt_candidate
 
    scope :pending, -> { where(reply: PENDING) }
+   scope :yes, -> { where(reply: YES) }
+   scope :no, -> { where(reply: NO) }
+   scope :expired, -> { where(reply: EXPIRED) }
 
    private
 

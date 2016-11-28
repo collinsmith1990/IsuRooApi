@@ -22,6 +22,15 @@ class Options
   end
 
   def merge(query)
+    query = merge_filters(query)
+    query = merge_order(query)
+  end
+
+  def merge_filters(query)
+    query
+  end
+
+  def merge_order(query)
     query
   end
 end

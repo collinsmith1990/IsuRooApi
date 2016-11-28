@@ -14,7 +14,7 @@ RSpec.describe CandidateOptions, :type => :options do
 
       results = options.merge(candidates)
 
-      expect(candidates).to eq(results)
+      expect(results).to eq(candidates)
     end
 
     context "order" do

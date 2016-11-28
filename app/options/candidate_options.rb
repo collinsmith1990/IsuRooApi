@@ -22,11 +22,6 @@ class CandidateOptions < Options
     @candidate_id = options[CANDIDATE_ID_KEY.to_sym]
   end
 
-  def merge(query)
-    query = merge_filters(query)
-    query = merge_order(query)
-  end
-
   def merge_order(query)
     case @order
     when MATCH_ORDER
