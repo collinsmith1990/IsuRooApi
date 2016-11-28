@@ -148,4 +148,13 @@ RSpec.describe Candidate, :type => :model do
                                        .and change{candidate.games_played}.by(1)
     end
   end
+
+  describe "matches" do
+    it "should return candidate_matches" do
+      candidate = create(:candidate)
+      matches = create_list(:candidate_match, 5, candidate: candidate)
+
+      expect(candidate.matches).to eq(matches)
+    end
+  end
 end
