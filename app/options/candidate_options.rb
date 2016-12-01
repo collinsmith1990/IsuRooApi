@@ -1,9 +1,6 @@
 class CandidateOptions < Options
-  # Keys
-  CANDIDATE_ID_KEY = 'candidate_id'
-
   # Orders
-  MATCH_ORDER = 'match'
+  RATING_ORDER = 'rating'
 
   # Filters
   MALE_FILTER = 'm'
@@ -11,24 +8,14 @@ class CandidateOptions < Options
   HAS_BIO_FILTER = 'has_bio'
   HAS_PHOTO_FILTER = 'has_photo'
 
-  attr_accessor :candidate_id
-
-  def read_options(options)
-    super(options)
-    read_candidate_id(options)
-  end
-
-  def read_candidate_id(options)
-    @candidate_id = options[CANDIDATE_ID_KEY.to_sym]
-  end
-
   def merge_order(query)
     case @order
-    when MATCH_ORDER
-      query.match_order(Candidate.find(@candidate_id))
+    when RATING_ORDER 
+      query = query.rating_order
     else
       query
     end
+    super(query)
   end
 
   def merge_filters(query)

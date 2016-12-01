@@ -41,22 +41,22 @@ RSpec.describe Candidate, :type => :model do
     end
   end
 
-  describe "matches" do
-    it "should return all candidates within 100 rating of the provided candidate" do
-      # We are looking for matches for this candidate
-      candidate = create(:candidate, rating: 1600)
+  #describe "matches" do
+    #it "should return all candidates within 100 rating of the provided candidate" do
+      ## We are looking for matches for this candidate
+      #candidate = create(:candidate, rating: 1600)
 
-      included_results = [create(:candidate, rating: 1650),
-                          create(:candidate, rating: 1500)]
+      #included_results = [create(:candidate, rating: 1650),
+                          #create(:candidate, rating: 1500)]
 
-      #This candidate should be excluded from the results since the rating is out of range
-      create(:candidate, rating: 1400)
+      ##This candidate should be excluded from the results since the rating is out of range
+      #create(:candidate, rating: 1400)
 
-      matches = Candidate.matches(candidate)
+      #matches = Candidate.matches(candidate)
 
-      expect(matches).to match_array(included_results)
-    end
-  end
+      #expect(matches).to match_array(included_results)
+    #end
+  #end
 
   describe "male" do
     it "shuld return all male candidates" do
@@ -95,16 +95,28 @@ RSpec.describe Candidate, :type => :model do
     end
   end
 
-  describe "match_order" do
-    it "should be ascending order of difference in rating" do
-      candidate = create(:candidate, rating: 1700)
+  #describe "match_order" do
+    #it "should be ascending order of difference in rating" do
+      #candidate = create(:candidate, rating: 1700)
+      #candidates = [create(:candidate, rating: 1600),
+                    #create(:candidate, rating: 1300),
+                    #create(:candidate, rating: 1800),
+                    #create(:candidate, rating: 1750)]
+      #expected_order = [candidate, candidates[3], candidates[2], candidates[0], candidates[1]]
+
+      #expect(Candidate.match_order(candidate)).to match_array(expected_order)
+    #end
+  #end
+
+  describe "rating_order" do
+    it "should be descending order of rating" do
       candidates = [create(:candidate, rating: 1600),
                     create(:candidate, rating: 1300),
                     create(:candidate, rating: 1800),
                     create(:candidate, rating: 1750)]
-      expected_order = [candidate, candidates[3], candidates[2], candidates[0], candidates[1]]
+      expected_order = [candidates[2], candidates[3], candidates[0], candidates[1]]
 
-      expect(Candidate.match_order(candidate)).to match_array(expected_order)
+      expect(Candidate.rating_order).to match_array(expected_order)
     end
   end
 

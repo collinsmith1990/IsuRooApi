@@ -18,10 +18,9 @@ class Candidate < ActiveRecord::Base
   scope :female, -> { where(gender: FEMALE) }
   scope :has_bio, -> { where("candidates.biography IS NOT NULL") }
   scope :has_photo, -> { where("EXISTS (SELECT 1 FROM photos WHERE photos.candidate_id = candidates.id)") }
-  scope :matches, -> (candidate) { where("ABS(candidates.rating - #{candidate.rating}) <= 100 AND candidates.id != #{candidate.id}") }
 
   # Order
-  scope :match_order, -> (candidate) { order("ABS(candidates.rating - #{candidate.rating})") }
+  scope :rating_order, -> { order("rating DESC") }
 
   def likes(candidate)
     Rater.new(self).likes(candidate)

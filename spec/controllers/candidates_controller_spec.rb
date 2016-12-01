@@ -6,30 +6,46 @@ RSpec.describe CandidatesController, :type => :controller do
   describe "GET #index" do
     it "responds successfully with an HTTP 200 status code" do
       login
-      get :index, params: { candidate_id: create(:candidate).id }
+      get :index
       expect(response).to be_success
       expect(response).to have_http_status(200)
     end
 
-    describe "order=match" do
-      it "should return candidates ordered by match" do
-        candidate = create(:candidate, rating: 1500)
-
-        candidates = [create(:candidate, rating: 1450),
+    describe "order=rating" do
+      it "should return candidates ordered by rating" do
+        candidates = [create(:candidate, rating: 1600),
                       create(:candidate, rating: 1300),
-                      create(:candidate, rating: 1525),
-                      create(:candidate, rating: 1500)]
+                      create(:candidate, rating: 1800),
+                      create(:candidate, rating: 1750)]
+        expected_order = [candidates[2], candidates[3], candidates[0], candidates[1]]
 
-        # The provdied candidate should be excluded, you can't match to yourself
-        # Candidates with a rating difference greater than 100 are also excluded
-        expected_order = [candidates[3], candidates[2], candidates[0]]
+        login
 
-        login(candidate.user)
-        get :index, params: { candidate_id: candidate.id, order: 'match' }
+        get :index, params: { order: CandidateOptions::RATING_ORDER }
 
         expect(assigns(:candidates)).to match_array(expected_order)
       end
     end
+
+    #describe "order=match" do
+      #it "should return candidates ordered by match" do
+        #candidate = create(:candidate, rating: 1500)
+
+        #candidates = [create(:candidate, rating: 1450),
+                      #create(:candidate, rating: 1300),
+                      #create(:candidate, rating: 1525),
+                      #create(:candidate, rating: 1500)]
+
+        ## The provdied candidate should be excluded, you can't match to yourself
+        ## Candidates with a rating difference greater than 100 are also excluded
+        #expected_order = [candidates[3], candidates[2], candidates[0]]
+
+        #login(candidate.user)
+        #get :index, params: { candidate_id: candidate.id, order: 'match' }
+
+        #expect(assigns(:candidates)).to match_array(expected_order)
+      #end
+    #end
 
     describe "filters" do
       describe "f" do
@@ -38,7 +54,7 @@ RSpec.describe CandidatesController, :type => :controller do
           females = create_list(:candidate, 2, gender: Candidate::FEMALE)
 
           login(males[0].user)
-          get :index, params: { candidate_id: males[0].id, filters: [CandidateOptions::FEMALE_FILTER] }
+          get :index, params: { filters: [CandidateOptions::FEMALE_FILTER] }
 
           expect(assigns(:candidates)).to match_array(females)
         end
@@ -50,7 +66,7 @@ RSpec.describe CandidatesController, :type => :controller do
           candidates_with_bio = create_list(:candidate, 2, biography: "Has Bio")
 
           login(candidates_without_bio[0].user)
-          get :index, params: { candidate_id: candidates_without_bio[0].id, filters: [CandidateOptions::HAS_BIO_FILTER] }
+          get :index, params: { filters: [CandidateOptions::HAS_BIO_FILTER] }
 
           expect(assigns(:candidates)).to match_array(candidates_with_bio)
         end
@@ -63,7 +79,7 @@ RSpec.describe CandidatesController, :type => :controller do
           candidates_without_photo = create_list(:candidate, 2)
 
           login(candidates_without_photo[0].user)
-          get :index, params: { candidate_id: candidates_without_photo[0].id, filters: [CandidateOptions::HAS_PHOTO_FILTER] }
+          get :index, params: { filters: [CandidateOptions::HAS_PHOTO_FILTER] }
 
           expect(assigns(:candidates)).to match_array(candidates_with_photo)
         end

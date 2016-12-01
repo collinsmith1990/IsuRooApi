@@ -22,8 +22,7 @@ class CandidatesController < ApplicationController
 
 
   def index
-    @candidate = Candidate.find(params[:candidate_id])
-    @candidates = options.merge(Candidate.matches(@candidate))
+    @candidates = options.merge(Candidate.all)
 
     render json: @candidates
   end

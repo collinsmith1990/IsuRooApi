@@ -18,22 +18,54 @@ RSpec.describe CandidateOptions, :type => :options do
     end
 
     context "order" do
-      describe "match" do
-        it "should return all records orded by match" do
-          candidate = create(:candidate, rating: 1500)
-
-          candidates = [create(:candidate, rating: 1450),
+      describe "rating" do
+        it "should return all records orded by rating descending" do
+          candidates = [create(:candidate, rating: 1600),
                         create(:candidate, rating: 1300),
-                        create(:candidate, rating: 1525)]
+                        create(:candidate, rating: 1800),
+                        create(:candidate, rating: 1750)]
+          expected_order = [candidates[2], candidates[3], candidates[0], candidates[1]]
 
-          expected_order = [candidate, candidates[2], candidates[0], candidates[1]]
-          options = CandidateOptions.new({order: CandidateOptions::MATCH_ORDER, candidate_id: candidate.id})
+          options = CandidateOptions.new({order: CandidateOptions::RATING_ORDER})
 
           results = options.merge(Candidate.all)
 
           expect(results).to eq(expected_order)
         end
       end
+
+      describe "reverse rating" do
+        it "should return all records orded by rating ascending" do
+          candidates = [create(:candidate, rating: 1600),
+                        create(:candidate, rating: 1300),
+                        create(:candidate, rating: 1800),
+                        create(:candidate, rating: 1750)]
+          expected_order = [candidates[1], candidates[0], candidates[3], candidates[2]]
+
+          options = CandidateOptions.new({order: CandidateOptions::RATING_ORDER, order_direction: CandidateOptions::REVERSE_ORDER})
+
+          results = options.merge(Candidate.all)
+
+          expect(results).to eq(expected_order)
+        end
+      end
+
+      #describe "match" do
+        #it "should return all records orded by match" do
+          #candidate = create(:candidate, rating: 1500)
+
+          #candidates = [create(:candidate, rating: 1450),
+                        #create(:candidate, rating: 1300),
+                        #create(:candidate, rating: 1525)]
+
+          #expected_order = [candidate, candidates[2], candidates[0], candidates[1]]
+          #options = CandidateOptions.new({order: CandidateOptions::MATCH_ORDER, candidate_id: candidate.id})
+
+          #results = options.merge(Candidate.all)
+
+          #expect(results).to eq(expected_order)
+        #end
+      #end
     end
 
     context "filters" do
